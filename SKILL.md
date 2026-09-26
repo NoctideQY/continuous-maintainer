@@ -21,6 +21,18 @@ On the first invocation for a project, do not start editing immediately. Check f
 
 Write the answers to the durable state files before doing implementation work. Do not infer a product direction from a single issue. If the developer has no problem report yet, record that explicitly and continue only with an agreed goal and cadence.
 
+### Create or reuse the schedule
+
+After initialization is complete, set up the scheduler instead of merely describing how the developer could do it:
+
+1. Confirm that the target path is a real project workspace, normally a Git repository with the goal and state files present. If the current directory is empty, a parent repository contains unrelated files, or the target path is ambiguous, ask the developer to choose the project path and do not create an automation yet.
+2. Inspect existing Codex automations for one whose project path, name, or prompt targets this project. Prefer updating that automation over creating a duplicate.
+3. If no matching automation exists, call the host's automation API to create one recurring task using the confirmed cadence and timezone. For a Codex thread, use a heartbeat automation attached to the current thread unless the developer explicitly asks for an independent standalone task. For a standalone project task, use the cron automation type and the target project's project id.
+4. Put the absolute project path and the maintenance prompt in the automation. The prompt must tell the agent to invoke this skill, preserve the state files, calculate due-ness, and remain quiet when nothing actionable changed.
+5. Record the automation id, provider, cadence, timezone, and creation/update time in `maintenance-state.md`. If the scheduler API returns an error or needs an unavailable project id, do not fake success: preserve the initialized files and report the exact scheduling blocker.
+
+The schedule is part of initialization, not an optional follow-up. A successful first-use response must say whether the automation was created, reused, or blocked, and must include its next expected run when the provider reports one.
+
 Before each later run, locate or read the project's durable context:
 
 - `project-goal.md` or an equivalent statement of the final goal and non-goals;
@@ -71,7 +83,7 @@ Keep decisions reproducible. Use the files described in [state-file-schema.md](r
 
 ## Scheduling and provider boundaries
 
-This skill defines the work protocol; the host scheduler wakes it up. For Codex, create a recurring thread automation whose prompt includes the project path and asks it to invoke this skill. For Claude or an external scheduler, use the same prompt and preserve the same state files. See [scheduler-adapters.md](references/scheduler-adapters.md). Do not create a second schedule when an existing automation already targets this project.
+This skill defines the work protocol and initializes the host scheduler after first-use confirmation. For Codex, use the automation API described in [scheduler-adapters.md](references/scheduler-adapters.md). For Claude or an external scheduler, create or reuse one recurring task through that provider's supported API and preserve the same state files. Do not create a second schedule when an existing automation already targets this project.
 
 ## Report format
 

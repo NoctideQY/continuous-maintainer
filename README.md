@@ -11,6 +11,7 @@ It is designed for projects whose developers still care about the product but no
 - prioritizes reproducible bugs, user feedback, reliability, and focused features;
 - keeps a durable backlog of developer-reported problems for future runs;
 - remembers the last run and last completed maintenance time, so frequent scheduler wake-ups do not cause premature updates;
+- creates or reuses the host's recurring automation after first-use initialization, and records its id and status;
 - preserves project memory in human-readable Markdown files;
 - stops before risky changes such as migrations, public API changes, releases, or permission changes;
 - works with a recurring Codex thread automation or an external Claude/cron scheduler.
@@ -25,7 +26,7 @@ Copy the `continuous-maintainer` directory into your Codex skills directory, or 
 
 ## Project setup
 
-On first use, the agent asks for the final goal, any initial problem reports, and the desired maintenance cadence/timezone. It stores these in `project-goal.md`, `maintenance-backlog.md`, and `maintenance-state.md`. You can also add `developer-preferences.md`, `progress.md`, `decisions.md`, and `rejected-ideas.md`. The schemas and scheduler prompt are documented in `references/`.
+On first use, the agent asks for the final goal, any initial problem reports, and the desired maintenance cadence/timezone. It stores these in `project-goal.md`, `maintenance-backlog.md`, and `maintenance-state.md`, then creates or reuses a recurring automation through the host scheduler. If the path is not a real project workspace or scheduling fails, it pauses and reports the blocker rather than pretending that background maintenance is active. You can also add `developer-preferences.md`, `progress.md`, `decisions.md`, and `rejected-ideas.md`. The schemas and scheduler prompt are documented in `references/`.
 
 ## License
 

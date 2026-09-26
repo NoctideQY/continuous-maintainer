@@ -12,6 +12,10 @@ This file is required after first-use initialization. Use ISO 8601 timestamps wi
 initialized: true
 timezone: Asia/Shanghai
 cadence: weekly
+automation_provider: codex
+automation_id: heartbeat-or-cron-id
+automation_status: active
+automation_created_at: 2026-09-26T20:15:00+08:00
 last_run_at: 2026-09-26T20:00:00+08:00
 last_maintenance_at: 2026-09-26T20:15:00+08:00
 next_due_at: 2026-10-03T20:15:00+08:00
@@ -19,6 +23,8 @@ consecutive_blocked_runs: 0
 ```
 
 Supported cadence values should be human-readable and unambiguous, for example `daily`, `weekly`, `biweekly`, `monthly`, or an agreed interval such as `every 3 days`. If the cadence is changed, record the change in `decisions.md` and recompute `next_due_at` from the last completed maintenance.
+
+The automation fields identify the scheduler created or reused during initialization. If setup is blocked, use `automation_status: blocked` and add a human-readable `automation_error` field; never claim that a schedule exists when the provider did not confirm it.
 
 ## `maintenance-backlog.md`
 
