@@ -1,0 +1,4 @@
+interface:
+  display_name: "Continuous Maintainer"
+  short_description: "Safely advance software projects on a schedule"
+  default_prompt: "Use $continuous-maintainer to inspect this project, choose one goal-aligned improvement, and prepare a reviewable change."
